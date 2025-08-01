@@ -2,7 +2,9 @@
 ## POSTMAN ENDPOINTS 
 
 1**http://localhost:5000/api/crash-history**
+
 2**http://localhost:5000/api/round/:roundId**
+
 3**http://localhost:5000/api/player-bethistory/:socketId**
 
 ## VERCEL Link
@@ -13,8 +15,8 @@
  ## To clone The Repo 
 **git clone https://github.com/Roodius/Crash-Game-Crypto-API-WebSockets.git**
 ---
+
 PORT=5000
----
 DB_link=mongodb://localhost:27017/cryptoCrash
 
 
