@@ -13,14 +13,14 @@ const port = process.env.PORT;
 
 const io = new Server(server, {
   cors: {
-    origin: "*", // Same as above
+    origin: "https://crash-game-crypto-api-web-sockets.vercel.app", // Same as above
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 app.use(cors({
-  origin: "*", // Replace with your real frontend URL
+  origin: "https://crash-game-crypto-api-web-sockets.vercel.app", // Replace with your real frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 }));
