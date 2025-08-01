@@ -1,39 +1,41 @@
-/crypto-crash-server
- -> server.js     # Main entry point
-
- -> /routes
-       └── gameRoutes.js          # Optional: GET crash history, etc.
-
-─> /controllers
-       └── gameController.js      # Optional: handle REST endpoints
-
-─> /models
-      ├── Bet.js                 # Save bets per round
-      └── GameRound.js           # Save crash point per round
-
-─> /socket-handlers
-      ├── index.js               # Register all WebSocket events
-      └── gameEvents.js          # place_bet, cash_out, etc.
-
-─> /services
-       ├── gameEngine.js          # Core multiplier & round logic
-       └── cryptoPriceService.js  # Real-time USD → BTC price fetcher
-
-─> /utils
-      └── crashCalculator.js     # Generate random crash multiplier
-
-─> .env
-─> package.json
-
-# ----------------------------------------------------------------------- #
-
-[WebSocket Event]
-place_bet   -> 	Client → Server	   Client places a USD bet
-cash_out    ->    Client → Server	   Client requests cash out at current rate
-round_start -> 	Server → All	   A new crash game round begins
-multiplier  ->	Server → All	   Continuously updated multiplier
-crash       ->	Server → All	   Multiplier stopped (crashed), game over
-bet_result  ->	Server → Client	   Send win/loss result for the user
+## To clone The Repo 
+**git clone https://github.com/Roodius/Crash-Game-Crypto-API-WebSockets.git**
 
 
-# -------------------------------------------------------------------------#
+# Crypto Crash Game – Backend
+
+A real-time multiplayer crash gambling game built with **Node.js**, **WebSocket (Socket.IO)**, **Express**, and **MongoDB**. This backend handles all real-time communication, crash-point logic (provably fair), and user bets for the game.
+
+---
+
+## What is a Crash Game?
+
+A crash game is a multiplayer gambling-style game where a **multiplier starts increasing** from `1.00x` and can **crash randomly** at any moment. Players must **cash out before it crashes** to win. If they don't – they lose the bet.
+
+---
+
+##  Features
+
+- Real-time multiplier updates using WebSockets
+- Place bet & cash out functionality    // cashedout functionality not working properply
+- Provably fair crash-point algorithm using SHA256 hash
+- Game rounds stored in MongoDB
+- Tracks active & cashed out players
+- Crash history API
+- REST + WebSocket integration
+
+---
+
+## Tech Stack
+
+- Node.js
+- Express.js
+- Socket.IO
+- MongoDB + Mongoose
+- dotenv for config
+- uuid for round IDs
+- crypto for crash logic
+
+---
+
+
