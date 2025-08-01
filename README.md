@@ -11,7 +11,10 @@
 
 **https://vercel.com/osmans-projects-dc6e9795/crash-game-crypto-api-web-sockets**
  
- ### I kindly request you to clone this project locally and run it on your system for testing Vercel not support server deployment
+ ## Render link
+
+ 
+ 
  ## To clone The Repo 
 **git clone https://github.com/Roodius/Crash-Game-Crypto-API-WebSockets.git**
 ---
