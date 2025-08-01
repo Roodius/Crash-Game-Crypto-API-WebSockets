@@ -12,8 +12,8 @@
 **https://vercel.com/osmans-projects-dc6e9795/crash-game-crypto-api-web-sockets**
  
  ## Render link
+      ***https://dashboard.render.com/web/srv-d269avbe5dus73dc8hi0/deploys/dep-d269avje5dus73dc8i8g***
 
- 
  
  ## To clone The Repo 
 **git clone https://github.com/Roodius/Crash-Game-Crypto-API-WebSockets.git**
