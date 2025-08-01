@@ -6,12 +6,19 @@ const server = http.createServer(app);
 const { startGameLoop, registerSocketEvents } = require('./webSockets/GameSocket')
 const gamerouter = require('./routes/gameRoutes')
 const path = require('path')
+const cors = require('cors');
 // .env
 require('dotenv').config();
 const port = process.env.PORT;
 
-const io = new Server(server);
-const cors = require('cors');
+const io = new Server(server, {
+  cors: {
+    origin: "https://crash-game-crypto-api-web-sockets.vercel.app/", // Same as above
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
 app.use(cors({
   origin: "https://crash-game-crypto-api-web-sockets.vercel.app/", // Replace with your real frontend URL
   methods: ["GET", "POST"],
