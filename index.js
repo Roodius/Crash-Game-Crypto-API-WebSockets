@@ -13,14 +13,14 @@ const port = process.env.PORT;
 
 const io = new Server(server, {
   cors: {
-    origin: "https://crash-game-crypto-api-web-sockets.vercel.app/", // Same as above
+    origin: "https://crash-game-crypto-api-web-sockets.vercel.app", // Same as above
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 app.use(cors({
-  origin: "https://crash-game-crypto-api-web-sockets.vercel.app/", // Replace with your real frontend URL
+  origin: "https://crash-game-crypto-api-web-sockets.vercel.app", // Replace with your real frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 }));
@@ -28,7 +28,7 @@ app.use(cors({
 startGameLoop(io);
 registerSocketEvents(io);
 app.use('/api',gamerouter)
-app.use(express.static(path.join(__dirname,'public')))
+// app.use(express.static(path.join(__dirname,'public')))
 
 const mongoose = require('mongoose');
 require('dotenv').config();
