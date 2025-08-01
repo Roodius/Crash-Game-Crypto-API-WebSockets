@@ -1,21 +1,29 @@
-const websocketIo = require('socket.io')
+const {Server} = require('socket.io')
 const express = require('express')
 const http = require('http')
 const app = express();
 const server = http.createServer(app);
-const { startGameLoop } = require('./webSockets/GameSocket')
+const { startGameLoop, registerSocketEvents } = require('./webSockets/GameSocket')
+const gamerouter = require('./routes/gameRoutes')
+const path = require('path')
 // .env
 require('dotenv').config();
 const port = process.env.PORT;
 
-const io = websocketIo.Server(server);
+const io = new Server(server);
+startGameLoop(io);
+registerSocketEvents(io);
+app.use('/api',gamerouter)
+app.use(express.static(path.join(__dirname,'public')))
 
-app.use('/api', gameRoute)
+const mongoose = require('mongoose');
+require('dotenv').config();
+const link = process.env.DB_link;
+console.log(link)
 
-startGameLoop(io)
+mongoose.connect(link).then(() => console.log('connected  To Your Db')).catch((err) => console.error(err));
 
-
-app.listen(port, () => console.log("server started on port" + port))
+server.listen(port, () => console.log("server started on port" + port))
 
 
 

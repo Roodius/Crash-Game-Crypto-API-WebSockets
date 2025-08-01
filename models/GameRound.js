@@ -2,15 +2,11 @@ const mongoose = require('mongoose');
 const { required } = require('zod/mini');
 
 
-const betSchema = new mongoose.Schema({
+const roundsSchema = new mongoose.Schema({
     roundId:{
         type:String,
         require:true,
         unique:true
-    },
-    seed:{
-        type:String,
-        required:true,
     },
     crashPoint:{
         type:Number,
@@ -26,7 +22,7 @@ const betSchema = new mongoose.Schema({
 
 });
 
-    const Gamerounds = new mongoose.model('GameRounds',betSchema)
+    const Gamerounds = new mongoose.model('gameRounds',roundsSchema)
 
 module.exports = Gamerounds
 

@@ -1,0 +1,45 @@
+<!-- /public/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crash Game</title>
+</head>
+<body>
+  <h1>Crash Game</h1>
+     <p>Multiplier: <span id="multiplier">1.00x</span></p>
+  <input type="text" id="betAmount" placeholder="enter bet in USD">
+  <button onclick="placeBet()">PlaceBet</button>
+  <button onclick="cashOut()">CashOut</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();  // auto connects to server
+    socket.on("connect", () => {
+      console.log("Connected to WebSocket");
+    });
+
+    socket.on('multiplier', (val) => {
+        document.getElementById('multiplier').textContent = val.toFixed(2) + "x";
+    });
+
+
+     socket.on('crash', (point) => {
+      alert('Crashed at x' + point);
+    });
+
+    // ---------------------------------
+    function placeBet() {
+      const amount = parseFloat(document.getElementById('betAmount').value);
+      if (amount > 0) {
+        socket.emit('place_bet', { amount });
+        alert("Bet placed for $" + amount);
+      }
+    }
+
+    function cashOut() {
+      socket.emit('cash_out');
+      alert("Trying to cash out...");
+    }
+  </script>
+</body>
+</html>

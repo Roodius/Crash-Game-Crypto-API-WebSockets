@@ -1,13 +1,13 @@
 const uuid = require('uuid')
 const CrashPointGenerator = require("../services/crashCalculator")
-const {startNewRound,saveBet,endRound } =  require('../controllers/gameController')
+const {startNewRound,saveBet,endRound,cashOutBet } =  require('../controllers/gameController')
 
 
 let currtMultiplier = 1.0;
 let multiplierInterval = null;
 let roundId =  uuid.v4();
 let seed = uuid.v4();
-let crashPoint = CrashPointGenerator(seed ,roundId, 120);
+let crashPoint = CrashPointGenerator(seed ,roundId, 30);
 let StartTime = Date.now();
 let isCrashed = false;
 let gameInProgress = false;
@@ -15,13 +15,14 @@ let activeBets = new Map();
 let speedFactor = 50;
 let multiplierStep = 0.01;
 
-function GameEnd(){
+function GameEnd(io){
   setTimeout(() => {
     startGameLoop(io);
   }, 10000);
 }
-
+let ioRef;
  function startGameLoop(io){
+   ioRef = io;
     currtMultiplier = 1.0;
     isCrashed = false;
     activeBets.clear();
@@ -29,33 +30,40 @@ function GameEnd(){
     gameInProgress = true;
     StartTime = Date.now();
     roundId = uuid.v4()
-    crashPoint = CrashPointGenerator(seed, roundId, 120)
+    crashPoint = CrashPointGenerator(seed, roundId, 30)
+
+      
+       startNewRound({
+        roundId:roundId,
+        crashPoint:crashPoint,
+        startedAt: StartTime,
+        endedAt: Date.now(),
+      });
+
 
     multiplierInterval = setInterval(() => {
       currtMultiplier += multiplierStep;
-      io.emit('multiplier' ,currtMultiplier);
+      ioRef.emit('multiplier' ,currtMultiplier);
 
-      // auto cashedout
-
-       startNewRound({
-        roundId,
-        crashPoint,
-        startedAt: StartTime,
-        endedAt: Date.now()
-      });
-
+      //   auto cashedout
+    
       if(currtMultiplier >= crashPoint){
         clearInterval(multiplierInterval);
         isCrashed = true;
-        io.emit('crash',crashPoint);
-        GameEnd();
+        ioRef.emit('crash',crashPoint);
+
+        endRound({
+         roundId: roundId,
+         endedAt: Date.now()
+      })
+
+        GameEnd(ioRef);
       }
 
-    },50);
-    
+      
 
+    },speedFactor);
     
-
 
 }
 
@@ -65,7 +73,8 @@ function registerSocketEvents(io){
       console.log(`use Connected with Id ${socket.id}` );
       socket.emit('connected' ,socket.id)
       
-    socket.on('place_bet', (data) => {
+    socket.on('place_bet', ({amount}) => {
+      
         if(isCrashed === true || gameInProgress === false){
           socket.emit('crashedGame', {crashPoint});
           return;
@@ -79,26 +88,25 @@ function registerSocketEvents(io){
         }
 
             //Validate amount
-        if (typeof data.amount !== 'number' || data.amount <= 0) {
+        if (typeof amount !== 'number' || amount <= 0){
           socket.emit('bet_failed', { reason: "Invalid bet amount." });
           return;
         }
 
         activeBets.set(socket.id,{
-          amount: data.amount,               // from client
-          autoCashOut: data.autoCashOut || null,  // optional
+          amount: amount,               // from client
           cashedOut: false
         })
 
         saveBet({
-          roundId,
+          amount,   
           socketId:socket.id,
-          cashedOut:false
+           placedAt: new Date(),
         })
 
         socket.emit("bet_accepted", {
           roundId,
-          amount: data.amount
+          amount:amount
         });
     });
 
@@ -109,7 +117,7 @@ function registerSocketEvents(io){
         }
 
         if(!activeBets.has(socket.id)){
-          socket.emit('no active bet by', socket.id)
+          socket.emit('no active bet by',{socketId: socket.id})
           return;
         }
 
@@ -143,5 +151,6 @@ function registerSocketEvents(io){
 }
 
 module.exports = {
-  registerSocketEvents
+  registerSocketEvents,
+  startGameLoop
 }
