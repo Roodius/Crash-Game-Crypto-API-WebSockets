@@ -1,9 +1,9 @@
 
 ## POSTMAN ENDPOINTS 
 
-**http://localhost:5000/api/crash-history**
-**http://localhost:5000/api/round/:roundId**
-**http://localhost:5000/api/player-bethistory/:socketId**
+1**http://localhost:5000/api/crash-history**
+2**http://localhost:5000/api/round/:roundId**
+3**http://localhost:5000/api/player-bethistory/:socketId**
 
 ## VERCEL Link
 
@@ -12,8 +12,10 @@
  ### I kindly request you to clone this project locally and run it on your system for testing
  ## To clone The Repo 
 **git clone https://github.com/Roodius/Crash-Game-Crypto-API-WebSockets.git**
---PORT=5000
---DB_link=mongodb://localhost:27017/cryptoCrash
+---
+PORT=5000
+---
+DB_link=mongodb://localhost:27017/cryptoCrash
 
 
 # Crypto Crash Game – Backend
