@@ -17,6 +17,7 @@
 ---
 
 PORT=5000
+
 DB_link=mongodb://localhost:27017/cryptoCrash
 
 
